@@ -1,0 +1,64 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string nombre;
+        long documento;
+        char tipoAtencion;
+        string horaLlegada;
+        int triage;
+
+        Console.Write("Ingrese nombre del paciente: ");
+        nombre = Console.ReadLine().Trim();
+
+        Console.Write("Ingrese documento: ");
+        documento = long.Parse(Console.ReadLine());
+
+        Console.Write("Ingrese tipo de atención (M/O/L): ");
+        tipoAtencion = Char.ToUpper(Console.ReadKey().KeyChar);
+
+        Console.WriteLine();
+
+        Console.Write("Ingrese hora llegada (Formato militar 1430): ");
+        horaLlegada = Console.ReadLine().PadLeft(4, '0');
+
+        Console.Write("Ingrese nivel de triage (1,2,3): ");
+        triage = int.Parse(Console.ReadLine());
+
+        string horasTexto = horaLlegada.Substring(0, 2);
+        string minutosTexto = horaLlegada.Substring(2, 2);
+
+        int horas = int.Parse(horasTexto);
+        int minutos = int.Parse(minutosTexto);
+
+        int espera = 0;
+
+        espera += (triage == 1 ? 15 : 0);
+        espera += (triage == 2 ? 45 : 0);
+        espera += (triage == 3 ? 90 : 0);
+
+        int totalMinutos = (horas * 60) + minutos;
+
+        totalMinutos += espera;
+
+        int nuevaHora = totalMinutos / 60;
+        int nuevosMinutos = totalMinutos % 60;
+
+        string documentoTexto = documento.ToString();
+
+        string turno =
+            $"{tipoAtencion}-{documentoTexto.Substring(0, 2)}-{minutosTexto}";
+        Console.WriteLine("\n===== TICKET DE TURNO =====");
+
+        Console.WriteLine(
+            $"TURNO GENERADO: {turno}");
+
+        Console.WriteLine(
+            $"PACIENTE: {nombre.ToUpper()}");
+
+        Console.WriteLine(
+            $"ESTADO: Su cita estimada es a las {nuevaHora}:{nuevosMinutos:D2}");
+    }
+}
