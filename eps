@@ -1,0 +1,62 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        const double SMMLV = 1750905; 
+        const double IVA = 0.19;
+
+        
+        Console.Write("Ingrese el nombre del paciente: ");
+        string nombre = Console.ReadLine();
+
+        Console.Write("Ingrese los dias de hospitalizacion: ");
+        string diasTexto = Console.ReadLine();
+
+        Console.Write("Ingrese el costo por dia: ");
+        double costoDia = double.Parse(Console.ReadLine());
+
+        Console.Write("Ingrese categoria de afiliacion (A, B o C): ");
+        char categoria = Char.ToUpper(Console.ReadKey().KeyChar);
+
+        Console.WriteLine();
+
+       
+        int dias = int.Parse(diasTexto);
+
+        
+        double subtotal = dias * costoDia;
+
+        
+        double porcentaje =
+            (categoria == 'A' ? 0.115 : 0) +
+            (categoria == 'B' ? 0.173 : 0) +
+            (categoria == 'C' ? 0.23 : 0);
+
+        double copago = subtotal * porcentaje;
+
+        double ivaCalculado = copago * IVA;
+
+        double totalFinal = subtotal + copago + ivaCalculado;
+
+        double totalRedondeado = Math.Round(totalFinal);
+
+        string primeras3 = nombre.Substring(0, 3).ToUpper();
+        int cantidadLetras = nombre.Replace(" ", "").Length;
+        string idFactura = $"{primeras3}{cantidadLetras}6";
+
+        double limite = SMMLV * 2;
+        double excedente = subtotal > limite ? subtotal - limite : 0;
+
+        Console.WriteLine("\n===== FACTURA HOSPITALARIA =====");
+        Console.WriteLine($"Paciente: {nombre}");
+        Console.WriteLine($"ID Factura: {idFactura}");
+        Console.WriteLine($"Subtotal: ${subtotal}");
+        Console.WriteLine($"Copago: ${copago}");
+        Console.WriteLine($"IVA: ${ivaCalculado}");
+        Console.WriteLine($"TOTAL FINAL: ${totalRedondeado}");
+
+        Console.WriteLine($"Excedente de cobertura: ${excedente}");
+    }
+}
